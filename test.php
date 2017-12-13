@@ -1,8 +1,9 @@
 <?
 require('core/general.php');
 
-$db = new Database();
-if ($db->connect()){
-	echo 'ok';
-}
+$res = new User();
+$test = $res->getUser();
+print_r($test);
+
+
 ?>
