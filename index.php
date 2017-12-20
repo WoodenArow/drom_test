@@ -8,9 +8,22 @@
 		<link rel="stylesheet" href="css/index.css">
 		<!-- CSS overrides - remove if you don't need it -->
 		<link rel="stylesheet" href="css/app.css">
+		<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<?require 'core/general.php';?>
+		<?
+			require 'core/general.php';
+
+			session_start();
+
+			if (!isset($_SESSION[uid])) {
+				$_SESSION['anon'] = 1;
+			} else {
+				session_unregister('anon');
+			}
+			
+			print_r($_SESSION);
+		?>
 		
 		<section class="todoapp">
 			<header class="header">
@@ -68,5 +81,13 @@
 			<p>Created by <a href="https://github.com/WoodenArow/">Wooden</a></p>
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
+
+		<?if ($_SESSION[anon] == 1):?>
+		<script type="text/javascript">
+			$(function(){
+				console.log('anon detected');
+			});
+		</script>
+		<?endif;?>
 	</body>
 </html>

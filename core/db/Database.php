@@ -28,7 +28,7 @@
 			if (!$this->res){
     			return false;
 			} else {
-				return $this->res->fetch_array();
+				return $this->res->fetch_array(MYSQLI_ASSOC);
 			}
 		}
 
