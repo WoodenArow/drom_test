@@ -31,32 +31,13 @@
 				<input class="new-todo" placeholder="What needs to be done?" autofocus>
 			</header>
 			<!-- This section should be hidden by default and shown when there are todos -->
-			<section class="main">
+			<section class="main" style="display: none;">
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
-				<ul class="todo-list">
-					<!-- These are here just to show the structure of the list items -->
-					<!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-					<li class="completed">
-						<div class="view">
-							<input class="toggle" type="checkbox" checked>
-							<label>Taste JavaScript</label>
-							<button class="destroy"></button>
-						</div>
-						<input class="edit" value="Create a TodoMVC template">
-					</li>
-					<li>
-						<div class="view">
-							<input class="toggle" type="checkbox">
-							<label>Buy a unicorn</label>
-							<button class="destroy"></button>
-						</div>
-						<input class="edit" value="Rule the web">
-					</li>
-				</ul>
+				<ul class="todo-list"></ul>
 			</section>
 			<!-- This footer should hidden by default and shown when there are todos -->
-			<footer class="footer">
+			<footer class="footer" style="display: none;">
 				<!-- This should be `0 items left` by default -->
 				<span class="todo-count"><strong>0</strong> item left</span>
 				<!-- Remove this if you don't implement routing -->
@@ -82,12 +63,82 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 
-		<?if ($_SESSION[anon] == 1):?>
+		<?if ($_SESSION[anon] == 1):?> 
 		<script type="text/javascript">
 			$(function(){
 				console.log('anon detected');
 			});
 		</script>
 		<?endif;?>
+		<script type="text/javascript">
+
+			$(function(){
+				$('input.new-todo').bind("enterKey",function(e){
+					if ($(this).val().length != 0){
+						//alert($(this).val());
+						addTodo($(this).val());
+						tl_count(1);
+						$(this).val('');
+						if ($('section.main').is(':hidden')){
+							$('section.main').toggle();
+							$('footer.footer').toggle();
+						}
+					}
+				});
+				$('input.new-todo').keyup(function(e){
+    				if(e.keyCode == 13) {
+        				$(this).trigger("enterKey");
+    				}
+				});
+
+				$(document).on('change', 'input.toggle', function(){
+					if (this.checked){
+						$(this).parents("li").addClass("completed");
+						tl_count(0);
+					} else {
+						$(this).parents("li").removeClass("completed");
+						tl_count(1);
+					}
+				});
+				$(document).on('click', 'button.destroy', function(){
+					$(this).parents("li").remove();
+					if (!$(this).parents("li").hasClass("completed")){
+						tl_count(0);	
+					}
+					if ($('ul.todo-list li').length == 0){
+						$('section.main').toggle();
+						$('footer.footer').toggle();		
+					}
+				})
+			});
+
+			function addTodo(label){
+				var li = '\
+							<li>\
+								<div class="view">\
+									<input class="toggle" type="checkbox">\
+									<label>'+label+'</label>\
+									<button class="destroy"></button>\
+								</div>\
+								<input class="edit" value="'+label+'">\
+							</li>\
+						';
+				$('ul.todo-list').append(li);
+			}
+
+			function tl_count(cnt){
+				var c;
+				if (cnt == 1) {
+					c = parseInt($('.todo-count strong').text());
+					console.log(c);
+					c++;
+					console.log(c);
+					$('.todo-count strong').text(c);
+				} else {
+					var c = parseInt($('.todo-count strong').text())-1;
+					$('.todo-count strong').text(c);
+				}
+			}
+		</script>
 	</body>
 </html>

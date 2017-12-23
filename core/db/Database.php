@@ -6,15 +6,6 @@
 		private $db;
 		private $res;
 
-/*
-		public function connect() {
-			$this->db = new mysqli(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
-			if ($this->db->connect_errno > 0) {
-				die('Ошибка подключения к базе данных ['.$db->connect_error.']');
-			}
-		}
-*/
-
 		public function __construct() {
 			$this->db = new mysqli(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
 			if ($this->db->connect_errno > 0) {
@@ -23,7 +14,6 @@
 		}
 
 		public function select($sql) {
-			//die('There was an error running the query [' . $db->error . ']');
 			$this->res = $this->db->query($sql);
 			if (!$this->res){
     			return false;
@@ -42,7 +32,6 @@
 					return $this->res->insert_id;
 				}
 			} else {
-				//die('There was an error running the query [' . $db->error . ']');
 				return false;
 			} 
 		}
