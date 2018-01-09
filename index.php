@@ -110,6 +110,12 @@
 						$('footer.footer').toggle();		
 					}
 				})
+				$(window).bind('hashchange', function() {
+				     console.log(window.location.hash);
+				     var hash = window.location.hash;
+				     var shash = hash.substring(2);
+				     tabList(shash);
+				});
 			});
 
 			function addTodo(label){
@@ -137,6 +143,23 @@
 				} else {
 					var c = parseInt($('.todo-count strong').text())-1;
 					$('.todo-count strong').text(c);
+				}
+			}
+
+			
+			function tabList(tab){
+				switch (tab){
+					case 'active':
+						$('ul.todo-list li').css('display','');
+						$('ul.todo-list li.completed').css('display','none');
+						break;
+					case 'completed':
+						$('ul.todo-list li').css('display','none');
+						$('ul.todo-list li.completed').css('display','');
+						break;
+					default:
+						$('ul.todo-list li').css('display','');
+						break;
 				}
 			}
 		</script>
