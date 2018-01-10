@@ -14,8 +14,8 @@
 		<?
 			require 'core/general.php';
 
+/*
 			session_start();
-
 			if (!isset($_SESSION[uid])) {
 				$_SESSION['anon'] = 1;
 			} else {
@@ -23,6 +23,7 @@
 			}
 			
 			print_r($_SESSION);
+*/
 		?>
 		
 		<section class="todoapp">
@@ -73,6 +74,14 @@
 		<script type="text/javascript">
 
 			$(function(){
+				var ls = localStorage;
+				if (ls) {
+				    console.log('LocalStaroge enabled!');
+				    if (ls.getItem('tl-cnt') === null) {
+					ls.setItem('tl-cnt', 0);
+				    }
+				}
+				
 				$('input.new-todo').bind("enterKey",function(e){
 					if ($(this).val().length != 0){
 						//alert($(this).val());
@@ -86,9 +95,9 @@
 					}
 				});
 				$('input.new-todo').keyup(function(e){
-    				if(e.keyCode == 13) {
-        				$(this).trigger("enterKey");
-    				}
+					if(e.keyCode == 13) {
+						$(this).trigger("enterKey");
+					}
 				});
 
 				$(document).on('change', 'input.toggle', function(){
@@ -103,15 +112,15 @@
 				$(document).on('click', 'button.destroy', function(){
 					$(this).parents("li").remove();
 					if (!$(this).parents("li").hasClass("completed")){
-						tl_count(0);	
+						tl_count(0);
 					}
 					if ($('ul.todo-list li').length == 0){
 						$('section.main').toggle();
-						$('footer.footer').toggle();		
+						$('footer.footer').toggle();
 					}
 				})
 				$(window).bind('hashchange', function() {
-				     console.log(window.location.hash);
+//				     console.log(window.location.hash);
 				     var hash = window.location.hash;
 				     var shash = hash.substring(2);
 				     tabList(shash);
@@ -136,9 +145,9 @@
 				var c;
 				if (cnt == 1) {
 					c = parseInt($('.todo-count strong').text());
-					console.log(c);
+//					console.log(c);
 					c++;
-					console.log(c);
+//					console.log(c);
 					$('.todo-count strong').text(c);
 				} else {
 					var c = parseInt($('.todo-count strong').text())-1;
@@ -162,6 +171,7 @@
 						break;
 				}
 			}
+
 		</script>
 	</body>
 </html>
