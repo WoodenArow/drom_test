@@ -13,8 +13,7 @@
 	<body>
 		<?
 			require 'core/general.php';
-
-/*
+/**
 			session_start();
 			if (!isset($_SESSION[uid])) {
 				$_SESSION['anon'] = 1;
