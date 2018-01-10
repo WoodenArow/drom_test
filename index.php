@@ -71,21 +71,22 @@
 		</script>
 		<?endif;?>
 		<script type="text/javascript">
+			
+			var ls = localStorage;
 
 			$(function(){
-				var ls = localStorage;
-				if (ls) {
+				if (localStorage) {
 				    console.log('LocalStaroge enabled!');
-				    if (ls.getItem('tl-cnt') === null) {
-					ls.setItem('tl-cnt', 0);
+				    if (localStorage.getItem('tl-cnt') === null) {
+						localStorage.setItem('tl-cnt', 0);
 				    }
 				}
 				
 				$('input.new-todo').bind("enterKey",function(e){
 					if ($(this).val().length != 0){
-						//alert($(this).val());
 						addTodo($(this).val());
 						tl_count(1);
+						ls_incitem('tl-cnt');
 						$(this).val('');
 						if ($('section.main').is(':hidden')){
 							$('section.main').toggle();
@@ -119,7 +120,6 @@
 					}
 				})
 				$(window).bind('hashchange', function() {
-//				     console.log(window.location.hash);
 				     var hash = window.location.hash;
 				     var shash = hash.substring(2);
 				     tabList(shash);
@@ -144,9 +144,7 @@
 				var c;
 				if (cnt == 1) {
 					c = parseInt($('.todo-count strong').text());
-//					console.log(c);
 					c++;
-//					console.log(c);
 					$('.todo-count strong').text(c);
 				} else {
 					var c = parseInt($('.todo-count strong').text())-1;
@@ -169,6 +167,27 @@
 						$('ul.todo-list li').css('display','');
 						break;
 				}
+			}
+
+			function ls_additem(title, value){
+				ls.setItem(title, value);
+				return true;
+			}
+
+			function ls_incitem(title){
+				var v = parseInt(ls.getItem(title));
+				v++;
+				ls[title] = v;
+				return true;
+			}
+
+			function ls_getitem(title){
+				return ls.getItem(title);
+			}
+
+			function ls_changeitem(title, value){
+				ls[title] = value;
+				return true;
 			}
 
 		</script>
