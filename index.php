@@ -86,7 +86,6 @@
 					if ($(this).val().length != 0){
 						addTodo($(this).val());
 						tl_count(1);
-						ls_incitem('tl-cnt');
 						$(this).val('');
 						if ($('section.main').is(':hidden')){
 							$('section.main').toggle();
@@ -126,6 +125,16 @@
 				});
 			});
 
+			(function ($) {
+			    $.getUUID = (function() {
+			        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+			            return v.toString(16);
+			        });
+			        return uuid;
+			    });
+			})(jQuery);
+
 			function addTodo(label){
 				var li = '\
 							<li>\
@@ -138,6 +147,7 @@
 							</li>\
 						';
 				$('ul.todo-list').append(li);
+				ls_incitem('tl-cnt');
 			}
 
 			function tl_count(cnt){
