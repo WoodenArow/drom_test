@@ -6,25 +6,91 @@
 		<title>Template • TodoMVC</title>
 		<link rel="stylesheet" href="css/base.css">
 		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="css/modal.css">
 		<!-- CSS overrides - remove if you don't need it -->
 		<link rel="stylesheet" href="css/app.css">
 		<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="js/jquery.leanModal.min.js"></script>
 	</head>
 	<body>
 		<?
 			require 'core/general.php';
-/**
 			session_start();
+
 			if (!isset($_SESSION[uid])) {
 				$_SESSION['anon'] = 1;
 			} else {
 				session_unregister('anon');
 			}
-			
-			print_r($_SESSION);
-*/
 		?>
-		
+		<div id="modal" class="popupContainer" style="display:none;">
+				<header class="popupHeader">
+						<span class="header_title">Авторизация</span>
+						<span class="modal_close"><i class="fa fa-times"></i></span>
+				</header>
+
+				<section class="popupBody">
+						<!-- Username & Password Login form -->
+						<div class="user_login">
+								<form>
+										<label>Логин</label>
+										<input type="text" />
+										<br />
+
+										<label>Пароль</label>
+										<input type="password" />
+										<br />
+
+										<div class="action_btns">
+												<div><a href="#" class="btn btn_red">Авторизоваться</a></div>
+										</div>
+								</form>
+								<br />
+										
+								<div class="action_btns">
+									<div><a id="register_form" href="javascript:void(0);" class="btn ">Регистрация</a></div>
+								</div>
+						</div>
+
+						<!-- Register Form -->
+						<div class="user_register">
+								<form>
+										<label>Имя</label>
+										<input type="text" />
+										<br />
+
+										<label>Email Address</label>
+										<input type="email" />
+										<br />
+
+										<label>Password</label>
+										<input type="password" />
+										<br />
+
+										<div class="checkbox">
+												<input id="send_updates" type="checkbox" />
+												<label for="send_updates">Send me occasional email updates</label>
+										</div>
+
+										<div class="action_btns">
+												<div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
+												<div class="one_half last"><a href="#" class="btn btn_red">Register</a></div>
+										</div>
+								</form>
+						</div>
+				</section>
+		</div>
+		<div class="auth">
+			<?if (isset($_SESSION[anon])):?>
+				Вы не авторизованны. Данные будут храниться в localstorage данного браузера. Доступ к данным на другом устройстве будет не доступен.
+				<br>
+				<a href="#modal" id="modal_trigger">Авторизоваться?</a>
+			<?else:?>
+				Вы авторизованны как ...
+				<br>
+				<a href="javascript:void(0);">Выйти?</a>
+			<?endif;?>
+		</div>		
 		<section class="todoapp">
 			<header class="header">
 				<h1>todos</h1>
@@ -123,6 +189,8 @@
 				     var shash = hash.substring(2);
 				     tabList(shash);
 				});
+
+				$("#modal_trigger").leanModal();
 			});
 
 			(function ($) {
@@ -148,6 +216,7 @@
 						';
 				$('ul.todo-list').append(li);
 				ls_incitem('tl-cnt');
+				ls_additem
 			}
 
 			function tl_count(cnt){
