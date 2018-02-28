@@ -133,7 +133,7 @@
 		<?if ($_SESSION[anon] == 1):?> 
 		<script type="text/javascript">
 			$(function(){
-				console.log('anon detected');
+				console.log('anon detected - maybe');
 			});
 		</script>
 		<?endif;?>
