@@ -5,9 +5,14 @@
 
 		private $res;
 
-		function getUser() {
+		function getUser($ulogin, $upass) {
 			$this->res = new Database();
-			return  $this->res->select('Select true as chk;');
+			return  $this->res->select("SELECT id, uname FROM td_users WHERE ulogin = '$ulogin' AND upass = '$upass';");
+		}
+
+		function addUser($uname, $ulogin, $upass, $uemail) {
+			$this->res = new Database();
+			return $this->res->uid_query("INSERT INTO td_users (uname, ulogin, upass, uemail) VALUES ('$uname', '$ulogin', '$upass', '$uemail');");
 		}
 		
 	}
