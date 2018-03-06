@@ -1,5 +1,5 @@
 <?
-	require("core/conf/db_conf.php");
+	require("../core/conf/db_conf.php");
 
 	class Database {
 

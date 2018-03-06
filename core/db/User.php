@@ -1,5 +1,5 @@
 <?
-	require("core/db/Database.php");
+	require("../core/db/Database.php");
 
 	class User {
 

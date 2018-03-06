@@ -16,11 +16,14 @@
 		<?
 			session_start();
 
-			if (!isset($_SESSION[uid])) {
-				$_SESSION['anon'] = 1;
+print_r($_SESSION);
+
+			if (!isset($_SESSION["uid"])) {
+				$_SESSION["anon"] = 1;
 			} else {
-				session_unregister('anon');
+				unset($_SESSION['anon']);
 			}
+
 		?>
 		<div id="modal" class="popupContainer" style="display:none;">
 				<header class="popupHeader">
@@ -75,7 +78,7 @@
 				</section>
 		</div>
 		<div class="auth">
-			<?if (isset($_SESSION[anon])):?>
+			<?if (isset($_SESSION["anon"])):?>
 				Вы не авторизованны. Данные будут храниться в localstorage данного браузера. Доступ к данным на другом устройстве будет не доступен.
 				<br>
 				<a href="#modal" id="modal_trigger">Авторизоваться?</a>
@@ -124,7 +127,7 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 
-		<?if ($_SESSION[anon] == 1):?> 
+		<?if ($_SESSION["anon"] == 1):?> 
 		<script type="text/javascript">
 			$(function(){
 				console.log('anon detected - maybe');
@@ -146,26 +149,29 @@
 				$(document).on('click', 'a#log_in', function(){
 					$.ajax({
 						method: "POST",
-						url: "ajax.php?login",
+						url: "ajax/login.php?login",
 						dataType: 'json',
 						data: {
 							ulogin: $('form#auth input#ulogin').val(),
 							upass: $('form#auth input#upass').val(),
 						},
 						success: function(data){
-							alert('done');
 							if (!jQuery.isEmptyObject(data)){
 								console.log(data);
+
 							} else {
-								console.log('empty');
+								console.log(data);
+								alert('Пользователя с такими данными не существует.\n\rПроверьте введенные данные.');
 							}
 						},
 						error: function(data){
-							alert('fail');
+							alert('Произошла ошибка при обработке данных.\n\rПовторите попытку позже.');
 						}
 
 					});
 				});
+
+
 			});
 		</script>
 		<script type="text/javascript" src="js/general.js"></script>>

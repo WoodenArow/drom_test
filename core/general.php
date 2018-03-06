@@ -1,4 +1,4 @@
 <?
-	require('core/db/User.php');
+	require('../core/db/User.php');
 ?>
 

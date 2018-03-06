@@ -1,5 +1,5 @@
 <?
-	require("core/general.php");
+	require("../core/general.php");
 	header('Content-type: application/json');
 
 	if (isset($_REQUEST[registration])) {
