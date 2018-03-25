@@ -1,5 +1,5 @@
 <?
-	require("../core/general.php");
+	require($_SERVER["DOCUMENT_ROOT"]."/todolist/core/general.php");
 	header('Content-type: application/json');
 
 	if (isset($_REQUEST[registration])) {
