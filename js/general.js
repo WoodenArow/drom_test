@@ -15,7 +15,7 @@ $(function(){
 	    if (localStorage.getItem('tl-cnt'+suid) === null) {
 			localStorage.setItem('tl-cnt'+suid, 0);
 	    } else {
-	    	ls_build();
+			ls_build();
 	    }
 	}
 	
@@ -50,22 +50,25 @@ $(function(){
 					ls_obj.completed = true;
 
 					ls_changeitem('tl'+suid+'-'+tl_arr[i], JSON.stringify(ls_obj));
-					$.ajax({
-						method: "POST",
-						url: "ajax/todo.php?togglecompletetodo",
-						dataType: 'json',
-						data: {
-							lskey: tl_arr[i],
-							compl: '1'
-						},
-						success: function(data){
-							if (!jQuery.isEmptyObject(data)){
-								console.log(data);
-							} else {
-								console.log(data);
+
+					if (suid.length>0){
+						$.ajax({
+							method: "POST",
+							url: "ajax/todo.php?togglecompletetodo",
+							dataType: 'json',
+							data: {
+								lskey: tl_arr[i],
+								compl: '1'
+							},
+							success: function(data){
+								if (!jQuery.isEmptyObject(data)){
+									console.log(data);
+								} else {
+									console.log(data);
+								}
 							}
-						}
-					});
+						});	
+					}		
 				} 
 			}
 		} else {
@@ -81,22 +84,25 @@ $(function(){
 					ls_obj.completed = false;
 
 					ls_changeitem('tl'+suid+'-'+tl_arr[i], JSON.stringify(ls_obj));
-					$.ajax({
-						method: "POST",
-						url: "ajax/todo.php?togglecompletetodo",
-						dataType: 'json',
-						data: {
-							lskey: tl_arr[i],
-							compl: '0'
-						},
-						success: function(data){
-							if (!jQuery.isEmptyObject(data)){
-								console.log(data);
-							} else {
-								console.log(data);
+
+					if (suid.length>0) {
+						$.ajax({
+							method: "POST",
+							url: "ajax/todo.php?togglecompletetodo",
+							dataType: 'json',
+							data: {
+								lskey: tl_arr[i],
+								compl: '0'
+							},
+							success: function(data){
+								if (!jQuery.isEmptyObject(data)){
+									console.log(data);
+								} else {
+									console.log(data);
+								}
 							}
-						}
-					});
+						});
+					}
 				} 
 			}
 		}
@@ -153,22 +159,25 @@ $(function(){
 					ls_obj.title = $(this).val();
 
 					ls_changeitem('tl'+suid+'-'+tl_arr[i], JSON.stringify(ls_obj));
-					$.ajax({
-						method: "POST",
-						url: "ajax/todo.php?changetodo",
-						dataType: 'json',
-						data: {
-							lskey: tl_arr[i],
-							title: ls_obj.title
-						},
-						success: function(data){
-							if (!jQuery.isEmptyObject(data)){
-								console.log(data);
-							} else {
-								console.log(data);
+
+					if (suid.length>0){
+						$.ajax({
+							method: "POST",
+							url: "ajax/todo.php?changetodo",
+							dataType: 'json',
+							data: {
+								lskey: tl_arr[i],
+								title: ls_obj.title
+							},
+							success: function(data){
+								if (!jQuery.isEmptyObject(data)){
+									console.log(data);
+								} else {
+									console.log(data);
+								}
 							}
-						}
-					});
+						});
+					}
 				} 
 			}
 		}
@@ -210,21 +219,23 @@ $(function(){
 			} else {
 				ls_delitem('tl'+suid+'-'+tl_arr[i]);
 
-				$.ajax({
-					method: "POST",
-					url: "ajax/todo.php?removetodo",
-					dataType: 'json',
-					data: {
-						lskey: tl_arr[i]
-					},
-					success: function(data){
-						if (!jQuery.isEmptyObject(data)){
-							console.log(data);
-						} else {
-							console.log(data);
+				if (suid.length>0){
+					$.ajax({
+						method: "POST",
+						url: "ajax/todo.php?removetodo",
+						dataType: 'json',
+						data: {
+							lskey: tl_arr[i]
+						},
+						success: function(data){
+							if (!jQuery.isEmptyObject(data)){
+								console.log(data);
+							} else {
+								console.log(data);
+							}
 						}
-					}
-				});
+					});					
+				}
 			} 
 		}
 			
@@ -238,6 +249,8 @@ $(function(){
 		if ($('ul.todo-list li').length == 0){
 			$('section.main').toggle();
 			$('footer.footer').toggle();
+
+			$('input#toggle-all').prop('checked', false);
 		}
 		check_completed();
 	});
@@ -272,6 +285,7 @@ function ls_build(){
 		var arr = ls_getitem('tl'+suid).split(',');
 
 		arr.forEach(function(item){
+
 			var elem = ls_getitem('tl'+suid+'-'+item);
 			var obj = $.parseJSON(elem);
 			var cl = '';
@@ -322,7 +336,7 @@ function addTodo(label){
 	ls_incitem('tl-cnt'+suid);
 
 	var tl_key = $.getUUID();
-	if (ls_getitem('tl'+suid) === null){
+	if (ls_getitem('tl'+suid) === null || ls_getitem('tl'+suid).length == 0){
 		ls_additem('tl'+suid, tl_key);
 	} else {
 		ls_changeitem('tl'+suid, ls_getitem('tl'+suid) + ',' + tl_key);
@@ -330,24 +344,26 @@ function addTodo(label){
 
 	ls_additem('tl'+suid+'-'+tl_key, '{"title":"' + label + '","order":' + ls_getitem('tl-cnt'+suid) + ',"completed":false,"id":"' + tl_key + '"}');
 
-	$.ajax({
-		method: "POST",
-		url: "ajax/todo.php?addtodo",
-		dataType: 'json',
-		data: {
-			title: label,
-			uid: suid,
-			lskey: tl_key,
-			lsorder: ls_getitem('tl-cnt'+suid),
-		},
-		success: function(data){
-			if (!jQuery.isEmptyObject(data)){
-				console.log(data);
-			} else {
-				console.log(data);
+	if (suid.length>0) {
+		$.ajax({
+			method: "POST",
+			url: "ajax/todo.php?addtodo",
+			dataType: 'json',
+			data: {
+				title: label,
+				uid: suid,
+				lskey: tl_key,
+				lsorder: ls_getitem('tl-cnt'+suid),
+			},
+			success: function(data){
+				if (!jQuery.isEmptyObject(data)){
+					console.log(data);
+				} else {
+					console.log(data);
+				}
 			}
-		}
-	});
+		});
+	}
 
 }
 
@@ -399,26 +415,37 @@ function tabList(tab){
 function clear_completed(){
 	var new_tl = '';
 	if ($('li.completed').length > 0) {
-		$('ul.todo-list li').each(function(index){
-			var tl = ls_getitem('tl'+suid);
-			var tl_arr = tl.split(',');
-			if ($(this).hasClass('completed')){
-				for(var i=0; i<tl_arr.length; i++){
-					if (i!=index) {
-						if (new_tl.length == 0) {
-							new_tl += tl_arr[i];
-						} else {
-							new_tl += ',' + tl_arr[i];
-						}
-					} else {
-						ls_delitem('tl'+suid+'-'+tl_arr[i]);
-					} 
+
+		var tl = ls_getitem('tl'+suid);
+		var tl_arr = tl.split(',');
+		for(var i=0; i<tl_arr.length; i++){
+			var ls_item = ls_getitem('tl'+suid+'-'+tl_arr[i]);
+			var ls_obj = $.parseJSON(ls_item);
+			
+			if (ls_obj.completed == true){
+				ls_delitem('tl'+suid+'-'+ls_obj.id);
+			} else {
+				if (new_tl.length == 0) {
+					new_tl += ls_obj.id;
+				} else {
+					new_tl += ',' + ls_obj.id;
 				}
-			}
-		});
+			}			
+		}
+
+		console.log(new_tl);
+
 		$('li.completed').remove();
 		ls_delitem('tl'+suid);
 		ls_additem('tl'+suid, new_tl);
+
+		if ($('ul.todo-list li').length == 0){
+			$('section.main').toggle();
+			$('footer.footer').toggle();
+
+			$('input#toggle-all').prop('checked', false);
+		}
+
 		check_completed();
 	}
 }
