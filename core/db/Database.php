@@ -1,5 +1,5 @@
 <?
-	require("core/conf/db_conf.php");
+	require($_SERVER["DOCUMENT_ROOT"]."/todolist/core/conf/db_conf.php");
 
 	class Database {
 
@@ -26,10 +26,12 @@
 			
 			$this->res = $this->db->query($sql);
 			if ($this->res){
-				if ($this->res->insert_id === 0) {
+//				if ($this->res->insert_id === 0) {
+				if ($this->db->insert_id === 0) {
 					return true;
 				} else {
-					return $this->res->insert_id;
+//					return $this->res->insert_id;
+					return $this->db->insert_id;
 				}
 			} else {
 				return false;
